@@ -1,0 +1,290 @@
+---
+title: "Visualization in ggplot2 in Preparation for Case Study"
+author: "Jason Bronowitz"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    theme: readable
+    df_print: paged
+    highlight: tango
+    toc: yes
+    toc_float: yes
+---
+
+```{r include = FALSE}
+# SET GLOBAL KNITR OPTIONS
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 10, 
+                      fig.height = 8)
+
+# LOAD PACKAGES
+library(pander)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+```
+
+<br>
+<br>
+
+# Introduction
+
+This code through explores how to use `ggplot2` to visualize data, using data available in R from the `gapminder` dataset. I encourage you to first try this code through using `gapminder` and then explore your own data using `ggplot2`. 
+
+**Prerequisite:** Before attempting this code through, be sure to complete DataCamp's <a href="https://app.datacamp.com/learn/courses/introduction-to-data-visualization-with-ggplot2">Introduction to Data Visualization using ggplot2</a>. 
+
+If you enjoy visualization, I encourage you to continue on in DataCamp's skill track, <a href="https://app.datacamp.com/learn/skill-tracks/data-visualization-with-r">Data Visualization with R</a>.
+
+<br>
+
+# Preparation
+
+We've already loaded several relevant packages above, including `ggplot2` and `dplyr`, to facilitate data visualization. Next, let's install and then load the `gapminder` dataset. Run the following chunk of code to install and learn about `gapminder`:
+
+Learn more about the `gapminder` dataset here: <br> 
+https://cran.r-project.org/web/packages/gapminder/readme/README.html
+
+```{r}
+# Load required packages
+install.packages("gapminder", repos = "http://cran.us.r-project.org")
+library(gapminder)
+```
+
+<br>
+
+# Methods of exploring your data
+
+Explore the `gapminder` dataset with the goal of understanding each of its six variables. Here are three ways to do so. Think about when you might use each of these three ways.
+
+```{r}
+head(gapminder)
+str(gapminder)
+gapminder
+```
+<br>
+
+Write one sentence explaining, in your own words, what each of the three codes above accomplish:
+
+* `head()`: 
+* `str()`: 
+* Running the name of the dataset: 
+
+<br>
+
+## Summarizing median gdpPercap by continent
+
+Run the following chunk of code to summarize median `gdpPercap` by `continent` in the `year` 1952. Then, adjust the code to re-run for 1997. 
+
+```{r}
+# Summarize the median gdpPercap by continent in 1952
+by_continent <- gapminder %>%
+  filter(year == 1952) %>%
+  group_by(continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+# Create a bar plot showing medianGdp by continent
+ggplot(by_continent, aes(x = continent, y = medianGdpPercap)) +
+  geom_col()
+```
+
+<br>
+
+## Summarizing median lifeExp by country
+
+Run the following chunk of code to summarize median `lifeExp` by `country`, limited to those countries in Oceania, in 2007. Then, adjust the code to re-run for the Americas ("`Americas`") in 1987. Save this new `dplyr` filter as `by_country_americas` instead of `by_country_oceania`. Be sure to call the correct dataframe when plotting below.
+
+```{r}
+# Summarize the median lifeExp by country, limited to those countries in Oceania, in 2007
+by_country_oceania <- gapminder %>%
+  filter(year == 2007, continent == "Oceania") %>%
+  group_by(country) %>%
+  summarize(medianlifeExp = median(lifeExp))
+
+# Create a bar plot showing lifeExp by continent
+ggplot(by_country_oceania, aes(x = country, y = medianlifeExp)) +
+  geom_col()
+```
+<br>
+
+# Recreate graphs using ggplot2
+
+Replicate the following scatter plots as accurately as possible, using the `gapminder` dataset. 
+For full credit, all elements must match, including the capitalization of "Continent".
+
+Consult for assistance: <a href="https://ggplot2.tidyverse.org/reference/labs.html">Modify axis, legend, and plot labels</a>
+
+<br>
+
+## Graph #1
+
+Open the image at the following URL: https://www.public.asu.edu/~jbronowi/Gapminder1.png
+
+![](https://www.public.asu.edu/~jbronowi/Gapminder1.png)
+
+```{r}
+# Recreate Graph #1 here
+```
+
+<br>
+
+## Graph #2
+
+Open the image at the following URL: https://www.public.asu.edu/~jbronowi/Gapminder2.png
+
+![](https://www.public.asu.edu/~jbronowi/Gapminder2.png)
+<br>
+
+Hints for recreating Graph #2:
+
+* With `ggthemes`, use `theme_fivethirtyeight()` but do not use its color scale
+* Challenge: Explain why you can't use `scale_color_fivethirtyeight()`
+
+Additional resources:
+
+* <a href="https://github.com/BTJ01/ggthemes/blob/master/inst/examples/ex-theme_fivethirtyeight.R">ggthemes / fivethirtyeight</a>
+* For more details (beyond this assignment): <a href="http://rafalab.dfci.harvard.edu/dsbook/ggplot2.html#add-on-packages">Introduction to Data Science: ggplot2: Add On Packages</a>
+
+```{r}
+# Install required ggthtemes package and learn more using the ?ggthemes code.
+install.packages('ggthemes', repos = "http://cran.us.r-project.org")
+library(ggthemes)
+?ggthemes
+
+# Recreate Graph #2 here
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+**Do not continue scrolling until you are ready to see the solutions.**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Solutions
+
+Here is my code for creating these two images:
+<br>
+```{r}
+# Graph 1
+gapminder2002 <- gapminder %>%
+  filter(year == 2002)
+ggplot(gapminder2002, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  ggtitle("Life expectancy vs. GDP per capita across continents") +
+  labs(color = "Continent", subtitle = "as of 2002", caption = "Gapminder dataset") +
+  xlab("GDP per Capita") +
+  ylab("Life Expectancy")
+```
+<br>
+<br>
+```{r}
+# Graph 2
+gapminder2002 <- gapminder %>%
+  filter(year == 2002)
+ggplot(gapminder2002, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  ggtitle("Life expectancy vs. GDP per capita across continents") +
+  labs(color = "Continent", subtitle = "as of 2002", caption = "Gapminder dataset") +
+  theme_fivethirtyeight()
+```
+<br>
+<br>
+<br>
+
+# How to Submit
+
+Use the following instructions to submit your assignment, which may vary depending on your course's platform. Thank you to Dr. Jesse Lecy for these instructions on submitting using `RMarkdown`.
+
+<br>
+
+### Knitting to HTML
+
+When you have completed your assignment, click the "Knit" button to render your `.RMD` file into a `.HTML` report.
+
+<br>
+
+### Special Instructions
+
+Perform the following depending on your course's platform:
+
+* **Canvas:** Upload both your `.RMD` and `.HTML` files to the appropriate link
+* **Blackboard or iCollege:** Compress your `.RMD` and `.HTML` files in a `.ZIP` file and upload to the appropriate link
+
+`.HTML` files are preferred but not allowed by all platforms.
+
+<br>
+
+### Before You Submit
+
+Remember to ensure the following before submitting your assignment.
+
+1. Name your files using this format: **Lab-##-LastName.rmd** and **Lab-##-LastName.html**
+2. Show both the solution for your code and write out your answers in the body text 
+3. Do not show excessive output; truncate your output, e.g. with function `head()`
+4. Follow appropriate styling conventions, e.g. spaces after commas, etc.
+5. Above all, ensure that your conventions are consistent
+
+See [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml) for examples of common conventions.
+
+<br>
+<br>
+
+### Common Knitting Issues
+
+`.RMD` files are knit into `.HTML` and other formats procedural, or line-by-line.
+
+* An error in code when knitting will halt the process; error messages will tell you the specific line with the error
+* Certain functions like `install.packages()` or `setwd()` are bound to cause errors in knitting 
+* Altering a dataset or variable in one chunk will affect their use in all later chunks
+* If an object is "not found", make sure it was created or loaded with `library()` in a previous chunk
+
+**If All Else Fails:** If you cannot determine and fix the errors in a code chunk that's preventing you from knitting your document, add `eval = FALSE` inside the brackets of `{r}` at the beginning of a chunk to ensure that R does not attempt to evaluate it, that is: `{r eval = FALSE}`. This will prevent an erroneous chunk of code from halting the knitting process.  
+
+<br>
+<br>
+
+# Further Resources
+
+Learn more about `ggplot2` with the following resources:
+
+<br>
+
+* Resource I [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/introduction.html)
+
+* Resource II [R Graphics Cookbook](https://r-graphics.org/)
+
+* Resource III [The Grammar of Graphics](https://ggplot2.tidyverse.org/)
+
+<br>
+<br>
+
+# Works Cited
+
+This code through references and cites the following sources:
+
+* David Robinson, DataCamp. Source I. [Introduction to the Tidyverse: Types of Visualizations](https://campus.datacamp.com/courses/introduction-to-the-tidyverse/types-of-visualizations)
+
+* Gapminder Dataset. Source II. [Download Dataset](https://assets.datacamp.com/production/repositories/1323/datasets/578a87c7d1e46b61ec2cfc0aaa1e42acb3d03a11/gapminder.tsv)
+
+* Gapminder. Source III. [Gapminder](https://www.gapminder.org/)
+<br>
+<br>
+
+# Acknowledgements
+
+Thank you to Dr. Giovanni Circo and Dr. Jesse Lecy for inspiring this Code Through as part of ASU's program in <a href="https://publicservice.asu.edu/masters-degrees-phds/majorinfo/PPPGEMS/graduate/false/2">Program Evaluation and Data Analytics</a>.
+<br>
